@@ -9,6 +9,19 @@ const SIGNATURE = `
 > If you have any questions, comments, or crude remarks for me, please leave them in [my project's repo](https://github.com/hawkins/awesome-mobx-bot/issues/new)
 `;
 
+// TODO: Request this guy and get the source
+const AWESOME_MOBX_URL =
+  "https://raw.githubusercontent.com/mobxjs/awesome-mobx/master/README.md";
+let awesomeMobxSource;
+request(AWESOME_MOBX_URL, (err, _, body) => {
+  if (err) {
+    // UH OH!
+    throw err;
+  }
+
+  awesomeMobxSource = body;
+});
+
 module.exports = robot => {
   // Your code here
   robot.log("Yay, the app was loaded!");
@@ -26,12 +39,54 @@ module.exports = robot => {
     //   {owner: 'yourname', repo: 'yourrepo', number: 123, body: 'Hello World!}
 
     // TODO: Get the link from the issue
-    const link = context.payload.issue.body.trim();
+    /*
+    context.payload.issue = {
+      body: "Hey I found this cool tutorial\n\nhttps://javascript30.com"
+    }
+    */
+
+    const { login: author } = context.payload.sender;
+    const { body } = context.payload.issue;
+
+    // Find the link
+    let link;
+    const linkRegex = /(https?:\/\/.+)/g;
+    let m; // Regex match object
+    while ((m = linkRegex.exec(body)) !== null) {
+      if (m.index === linkRegex.lastIndex) {
+        linkRegex.lastIndex++;
+      }
+      link = m[1];
+    }
 
     if (!link) {
       // No link? no op
       return;
     }
+
+    // Yay we found a link!
+
+    // TODO: Is the link a duplicate?
+    // Search through the source
+    let regex = new RegExp(link.replace("/", "\\/"));
+    m = regex.exec(body) !== null;
+    // If we have a match, the link exists; its a duplicate, close the issue
+    if (m) {
+      // Comment on the issue
+      const paramsToComment = context.issue({
+        body: `Hey, thanks so much for suggesting that link! :+1:
+
+Turns out we've already got that link in the list, so I'm closing this issue since it's a duplicate. Thanks so much though! :raised_hands:
+${SIGNATURE}
+`
+      });
+      const paramsToClose = context.issue({ state: "closed" });
+
+      context.github.issues.createComment(paramsToComment);
+      return context.github.issues.edit(paramsToClose);
+    }
+
+    // Now lets find out the resource's name
 
     request(link, (err, res, body) => {
       if (err) {
@@ -40,8 +95,7 @@ module.exports = robot => {
         return;
       }
 
-      // TODO: Is the link a duplicate?
-
+      // Add the resource, but first we need the name
       let $ = cheerio.load(body);
 
       // Hoping most blog sites have decent opengraph support
