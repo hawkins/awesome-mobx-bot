@@ -33,43 +33,24 @@ module.exports = robot => {
   // https://probot.github.io/docs/development/
 
   robot.on("issues.opened", async context => {
-    // An issue was just opened.
-    // `context` extracts information from the event, which can be passed to
-    // GitHub API calls. This will return:
-    //   {owner: 'yourname', repo: 'yourrepo', number: 123, body: 'Hello World!}
-
-    // TODO: Get the link from the issue
-    /*
-    context.payload.issue = {
-      body: "Hey I found this cool tutorial\n\nhttps://javascript30.com"
-    }
-    */
-
     const { login: author } = context.payload.sender;
-    const { body } = context.payload.issue;
+    const { body: issueBody } = context.payload.issue;
 
-    // Find the link
+    // Find the link in the issue comment, or stop listening if no link was found
     let link;
     const linkRegex = /(https?:\/\/.+)/g;
-    let m; // Regex match object
-    while ((m = linkRegex.exec(body)) !== null) {
-      if (m.index === linkRegex.lastIndex) {
-        linkRegex.lastIndex++;
-      }
+    let m = linkRegex.exec(issueBody); // Regex match object
+    if (m) {
       link = m[1];
-    }
-
-    if (!link) {
+    } else {
       // No link? no op
       return;
     }
 
-    // Yay we found a link!
-
-    // TODO: Is the link a duplicate?
-    // Search through the source
+    // Check for duplicate links
+    /*
     let regex = new RegExp(link.replace("/", "\\/"));
-    m = regex.exec(body) !== null;
+    m = regex.exec(awesomeMobxSource) !== null;
     // If we have a match, the link exists; its a duplicate, close the issue
     if (m) {
       // Comment on the issue
@@ -85,9 +66,9 @@ ${SIGNATURE}
       context.github.issues.createComment(paramsToComment);
       return context.github.issues.edit(paramsToClose);
     }
+    */
 
     // Now lets find out the resource's name
-
     request(link, (err, res, body) => {
       if (err) {
         // TODO: Request the user check the link
@@ -100,24 +81,61 @@ ${SIGNATURE}
 
       // Hoping most blog sites have decent opengraph support
       let title = $('meta[property="og:title"]').attr("content");
-      // TODO: Other strategies
 
-      // TODO: Determine the type of link (article, tutorial, video etc) where possible
-
-      if (title) {
+      if (!title) {
         const params = context.issue({
           body: `Hi there!
 
-Thanks for suggesting that link! We found the following details for your link:
+        Thanks for suggesting that link! Unfortunately, I couldn't find the title of the link.
 
-- [${title}](${link}) (article)
-${SIGNATURE}
-`
+        cc @hawkins
+        ${SIGNATURE}
+        `
         });
 
         // Comment on the issue
-        // return context.github.issues.createComment(params);
+        return context.github.issues.createComment(params);
       }
+
+      // TODO: Determine the type of link (article, tutorial, video etc) where possible
+      let resourceType = "unknown";
+
+      // BLOGS determined by og:type=article
+      const ogType = $('meta[property="og:type"]').attr("content");
+      if (ogType == "article") resourceType = "blog";
+
+      // CASE STUDIES determined by "How we use" "How ${COMPANY} use"
+      const caseStudyRegex = /(how\swe\suse|how\s[^\s]*\suse)/i;
+      m = caseStudyRegex.exec(title);
+      if (m) resourceType = "case study";
+
+      // TUTORIALS determined if the title has these strings: "how to" "introduction" "tutorial"
+      const tutorialRegex = /(how\sto|intro|tutorial)/i;
+      m = tutorialRegex.exec(title);
+      if (m) resourceType = "tutorial";
+
+      // COMPARISONS determined if the title has these strings: "redux", "vs.", "versus"
+      const comparisonRegex = /(redux|\svs\.?\s|versus)/i;
+      m = comparisonRegex.exec(title);
+      if (m) resourceType = "comparison";
+
+      // VIDEOS determined if the link points to Youtube, Vimeo, *.tv
+      const videosRegex = /(https?:\/\/)?(youtube\.com|.*\.tv|vimeo\.com)/i;
+      m = videosRegex.exec(link);
+      if (m) resourceType = "video";
+
+      const params = context.issue({
+        body: `Hi there!
+
+Thanks for suggesting that link! We found the following details for your link:
+
+- [${title}](${link}) (${resourceType})
+${SIGNATURE}
+`
+      });
+
+      // Comment on the issue
+      return context.github.issues.createComment(params);
     });
   });
 };
