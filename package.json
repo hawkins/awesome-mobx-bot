@@ -10,7 +10,9 @@
     "test": "jest && standard"
   },
   "dependencies": {
-    "probot": "^5.0.0"
+    "cheerio": "^1.0.0-rc.2",
+    "probot": "^5.0.0",
+    "request": "^2.83.0"
   },
   "devDependencies": {
     "jest": "^21.2.1",
