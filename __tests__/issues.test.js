@@ -1,6 +1,6 @@
 const { opened } = require("../src/issues");
 
-const payload = require("./fixtures/issue_link_primitive.json");
+const fixture = require("./fixtures/issue_link_primitive.json");
 
 const awesomeMobXSource = `
 # mock source code
@@ -15,7 +15,7 @@ describe("issues", () => {
     beforeEach(() => {
       // This is an easy way to mock out the GitHub API
       context = {
-        payload,
+        payload: fixture.payload,
         issue: jest.fn().mockReturnValue({}),
         github: {
           issues: {

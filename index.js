@@ -16,7 +16,7 @@ request(AWESOME_MOBX_URL, (err, _, body) => {
 module.exports = robot => {
   robot.log("Awesome MobX Bot loaded! ");
 
-  robot.on("issues.opened", context => {
-    issues.opened(context, awesomeMobxSource);
+  robot.on("issues.opened", async context => {
+    await issues.opened(context, awesomeMobxSource);
   });
 };

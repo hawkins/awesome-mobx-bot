@@ -1,4 +1,4 @@
-const request = require("request");
+const request = require("request-promise-native");
 const cheerio = require("cheerio");
 const SIGNATURE = require("./signature");
 
@@ -36,74 +36,68 @@ ${SIGNATURE}
   }
 
   // Now lets find out the resource's name
-  request(link, (err, res, body) => {
-    if (err) {
-      // TODO: Request the user check the link
-      console.error(err);
-      return;
-    }
+  const body = await request(link);
 
-    // Add the resource, but first we need the name
-    let $ = cheerio.load(body);
+  // Add the resource, but first we need the name
+  let $ = cheerio.load(body);
 
-    // Hoping most blog sites have decent opengraph support
-    let title = $('meta[property="og:title"]').attr("content");
+  // Hoping most blog sites have decent opengraph support
+  let title = $('meta[property="og:title"]').attr("content");
 
-    if (!title) {
-      const params = context.issue({
-        body: `Hi there!
+  if (!title) {
+    const params = context.issue({
+      body: `Hi there!
 
       Thanks for suggesting that link! Unfortunately, I couldn't find the title of the link.
 
       cc @hawkins
       ${SIGNATURE}
       `
-      });
+    });
 
-      // Comment on the issue
-      return context.github.issues.createComment(params);
-    }
+    // Comment on the issue
+    return context.github.issues.createComment(params);
+  }
 
-    // Determine the type of link (article, tutorial, video etc) where possible
-    let resourceType = "unknown";
+  // Determine the type of link (article, tutorial, video etc) where possible
+  let resourceType = "unknown";
 
-    // BLOGS determined by og:type=article
-    const ogType = $('meta[property="og:type"]').attr("content");
-    if (ogType == "article") resourceType = "blog";
+  // BLOGS determined by og:type=article
+  const ogType = $('meta[property="og:type"]').attr("content");
+  if (ogType == "article") resourceType = "blog";
 
-    // CASE STUDIES determined by "How we use" "How ${COMPANY} use"
-    const caseStudyRegex = /(how\swe\suse|how\s[^\s]*\suse)/i;
-    m = caseStudyRegex.exec(title);
-    if (m) resourceType = "case study";
+  // CASE STUDIES determined by "How we use" "How ${COMPANY} use"
+  const caseStudyRegex = /(how\swe\suse|how\s[^\s]*\suse)/i;
+  m = caseStudyRegex.exec(title);
+  if (m) resourceType = "case study";
 
-    // TUTORIALS determined if the title has these strings: "how to" "introduction" "tutorial"
-    const tutorialRegex = /(how\sto|intro|tutorial)/i;
-    m = tutorialRegex.exec(title);
-    if (m) resourceType = "tutorial";
+  // TUTORIALS determined if the title has these strings: "how to" "introduction" "tutorial"
+  const tutorialRegex = /(how\sto|intro|tutorial)/i;
+  m = tutorialRegex.exec(title);
+  if (m) resourceType = "tutorial";
 
-    // COMPARISONS determined if the title has these strings: "redux", "vs.", "versus"
-    const comparisonRegex = /(redux|\svs\.?\s|versus)/i;
-    m = comparisonRegex.exec(title);
-    if (m) resourceType = "comparison";
+  // COMPARISONS determined if the title has these strings: "redux", "vs.", "versus"
+  const comparisonRegex = /(redux|\svs\.?\s|versus)/i;
+  m = comparisonRegex.exec(title);
+  if (m) resourceType = "comparison";
 
-    // VIDEOS determined if the link points to Youtube, Vimeo, *.tv
-    const videosRegex = /(https?:\/\/)?(youtube\.com|.*\.tv|vimeo\.com)/i;
-    m = videosRegex.exec(link);
-    if (m) resourceType = "video";
+  // VIDEOS determined if the link points to Youtube, Vimeo, *.tv
+  const videosRegex = /(https?:\/\/)?(youtube\.com|.*\.tv|vimeo\.com)/i;
+  m = videosRegex.exec(link);
+  if (m) resourceType = "video";
 
-    const params = context.issue({
-      body: `Hi there!
+  const params = context.issue({
+    body: `Hi there!
 
 Thanks for suggesting that link! We found the following details for your link:
 
 - [${title}](${link}) (${resourceType})
 ${SIGNATURE}
 `
-    });
-
-    // Comment on the issue
-    return context.github.issues.createComment(params);
   });
+
+  // Comment on the issue
+  return context.github.issues.createComment(params);
 };
 
 module.exports = {

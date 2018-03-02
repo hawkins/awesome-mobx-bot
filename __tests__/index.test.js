@@ -29,8 +29,8 @@ describe("awesome-mobx-bot", () => {
     robot.auth = () => Promise.resolve(github);
   });
 
-  describe("your functionality", () => {
-    it("performs an action", async () => {
+  describe("issues", () => {
+    it("comments on the issue", async () => {
       // Simulates delivery of a payload
       // payload.event is the X-GitHub-Event header sent by GitHub (for example "push")
       // payload.payload is the actual payload body
