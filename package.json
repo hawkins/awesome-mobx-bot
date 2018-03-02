@@ -7,12 +7,13 @@
   "repository": "https://github.com/hawkins/awesome-mobx-bot.git",
   "scripts": {
     "start": "probot run ./index.js",
-    "test": "jest && standard"
+    "test": "jest"
   },
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
     "probot": "^5.0.0",
-    "request": "^2.83.0"
+    "request": "^2.83.0",
+    "request-promise-native": "^1.0.5"
   },
   "devDependencies": {
     "jest": "^21.2.1",
