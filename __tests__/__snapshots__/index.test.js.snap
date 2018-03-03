@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`issues when opened with a new link 1`] = `[Function]`;
+
+exports[`issues when opened with a new link 2`] = `[Function]`;
+
+exports[`issues when opened with a new link 3`] = `[Function]`;
+
+exports[`issues when opened with a new link 4`] = `[Function]`;
+
+exports[`issues when opened with an existing link 1`] = `[Function]`;
+
+exports[`issues when opened with an existing link 2`] = `[Function]`;
