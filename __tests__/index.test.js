@@ -14,27 +14,26 @@ describe("issues", () => {
   let github;
 
   beforeEach(() => {
-    // Here we create a robot instance
     robot = createRobot();
-    // Here we initialize the app on the robot instance
     app(robot, awesomeMobXSource);
-    // This is an easy way to mock out the GitHub API
+
     github = {
       issues: {
         createComment: jest.fn(),
         edit: jest.fn()
       }
     };
+
     // Passes the mocked out GitHub API into out robot instance
     robot.auth = () => Promise.resolve(github);
   });
 
-  it("when an issue is opened with a new link", async () => {
+  it("when opened with a new link", async () => {
     await robot.receive(newLinkPayload);
     expect(github.issues.createComment).toHaveBeenCalled();
   });
 
-  it("when an issue is opened with an existing link", async () => {
+  it("when opened with an existing link", async () => {
     await robot.receive(existingLinkPayload);
     expect(github.issues.createComment).toHaveBeenCalled();
     expect(github.issues.edit).toHaveBeenCalledWith({
