@@ -35,7 +35,6 @@ module.exports = (robot, source) => {
 
   robot.on("issues.opened", async context => {
     await maybeUpdateMobXAwesomeListSource(source);
-    robot.log(awesomeMobXSource.length);
     await issues.opened(context, awesomeMobXSource);
   });
 };

@@ -1,13 +1,141 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`issues when opened with a new link 1`] = `[Function]`;
+exports[`issues when opened with a new link 1`] = `
+Array [
+  Array [
+    Object {
+      "body": "Hi there!
 
-exports[`issues when opened with a new link 2`] = `[Function]`;
+Thanks for suggesting that link! We found the following details for your link:
 
-exports[`issues when opened with a new link 3`] = `[Function]`;
+- [MobX vs Redux with React: A noob’s comparison and questions](https://codeburst.io/mobx-vs-redux-with-react-a-noobs-comparison-and-questions-382ba340be09) (Comparisons with other state management libraries)
 
-exports[`issues when opened with a new link 4`] = `[Function]`;
+I also opened an automatic PR with this link added. You can check this out [at PR #4](https://example.com/1) and make sure it looks good! :smile:
 
-exports[`issues when opened with an existing link 1`] = `[Function]`;
+---
 
-exports[`issues when opened with an existing link 2`] = `[Function]`;
+> Hi there, I'm a [bot](https://github.com/hawkins/awesome-mobx-bot) here to help automate tasks.
+
+> If you have any questions, comments, or crude remarks for me, please leave them in [my project's repo](https://github.com/hawkins/awesome-mobx-bot/issues/new)
+
+",
+      "number": 3,
+      "owner": "hawkins",
+      "repo": "awesome-mobx-bot",
+    },
+  ],
+]
+`;
+
+exports[`issues when opened with a new link 2`] = `
+Array [
+  Array [
+    Object {
+      "content": "# Comparisons with other state management libraries
+
+* [link](https://example.com/) - cool link 1!
+* [link](https://example.com/) - cool link 2!
+* [link](https://example.com/) - cool link 3!
+* [MobX vs Redux with React: A noob’s comparison and questions](https://codeburst.io/mobx-vs-redux-with-react-a-noobs-comparison-and-questions-382ba340be09)
+",
+      "encoding": "utf-8",
+      "owner": "hawkins",
+      "repo": "awesome-mobx-bot",
+    },
+  ],
+]
+`;
+
+exports[`issues when opened with a new link 3`] = `
+Array [
+  Array [
+    Object {
+      "message": "Add 'MobX vs Redux with React: A noob’s comparison and questions' by hawkins
+
+Fixes issue #3
+",
+      "owner": "hawkins",
+      "parents": Array [
+        "b1",
+      ],
+      "repo": "awesome-mobx-bot",
+      "tree": "b2",
+    },
+  ],
+]
+`;
+
+exports[`issues when opened with a new link 4`] = `
+Array [
+  Array [
+    Object {
+      "base": "master",
+      "body": "This is an automatic pull request spawned by #3.
+
+---
+
+> Hi there, I'm a [bot](https://github.com/hawkins/awesome-mobx-bot) here to help automate tasks.
+
+> If you have any questions, comments, or crude remarks for me, please leave them in [my project's repo](https://github.com/hawkins/awesome-mobx-bot/issues/new)
+",
+      "head": "bot/issue-3",
+      "owner": "hawkins",
+      "repo": "awesome-mobx-bot",
+      "title": "Add 'MobX vs Redux with React: A noob’s comparison and questions' by hawkins
+
+Fixes issue #3
+",
+    },
+  ],
+]
+`;
+
+exports[`issues when opened with an existing link 1`] = `
+Array [
+  Array [
+    Object {
+      "body": "Hey, thanks so much for suggesting that link! :+1:
+
+Turns out we've already got that link in the list, so I'm closing this issue since it's a duplicate. Thanks so much though! :raised_hands:
+
+---
+
+> Hi there, I'm a [bot](https://github.com/hawkins/awesome-mobx-bot) here to help automate tasks.
+
+> If you have any questions, comments, or crude remarks for me, please leave them in [my project's repo](https://github.com/hawkins/awesome-mobx-bot/issues/new)
+
+",
+      "number": 3,
+      "owner": "hawkins",
+      "repo": "awesome-mobx-bot",
+    },
+  ],
+]
+`;
+
+exports[`issues when opened with an existing link 2`] = `
+Array [
+  Array [
+    Object {
+      "number": 3,
+      "owner": "hawkins",
+      "repo": "awesome-mobx-bot",
+      "state": "closed",
+    },
+  ],
+]
+`;
+
+exports[`tools getSourceIndex can find the index of a type section 1`] = `
+Object {
+  "index": 0,
+  "length": 190,
+}
+`;
+
+exports[`tools getSourceIndex can find the index of a type section 2`] = `
+Object {
+  "index": -1,
+  "length": -1,
+}
+`;

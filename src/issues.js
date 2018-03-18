@@ -1,6 +1,7 @@
 const request = require("request-promise-native");
 const cheerio = require("cheerio");
 const SIGNATURE = require("./signature");
+const { getSourceIndex } = require("./tools");
 
 const opened = async (context, awesomeMobxSource) => {
   const { owner, repo } = context.repo();
@@ -74,23 +75,23 @@ ${SIGNATURE}
   let resourceType = "unknown";
 
   const ogType = $('meta[property="og:type"]').attr("content");
-  if (ogType == "article") resourceType = "blog";
+  if (ogType == "article") resourceType = "Blogs";
 
   const caseStudyRegex = /(how\swe\suse|how\s[^\s]*\suse)/i;
   m = caseStudyRegex.exec(title);
-  if (m) resourceType = "case study";
+  if (m) resourceType = "Case studies";
 
   const tutorialRegex = /(how\sto|intro|tutorial)/i;
   m = tutorialRegex.exec(title);
-  if (m) resourceType = "tutorial";
+  if (m) resourceType = "Tutorials";
 
   const comparisonRegex = /(redux|\svs\.?\s|versus)/i;
   m = comparisonRegex.exec(title);
-  if (m) resourceType = "comparison";
+  if (m) resourceType = "Comparisons with other state management libraries";
 
   const videosRegex = /(https?:\/\/)?(youtube\.com|.*\.tv|vimeo\.com)/i;
   m = videosRegex.exec(link);
-  if (m) resourceType = "video";
+  if (m) resourceType = "Videos";
 
   /*
    * Create a commit
@@ -104,7 +105,11 @@ ${SIGNATURE}
   });
 
   // TODO: Find where to add the link to the file
-  awesomeMobxSource += `\n[${title}](${link})`;
+  const { index, length } = getSourceIndex(awesomeMobxSource, resourceType);
+  awesomeMobxSource =
+    awesomeMobxSource.slice(0, index + length) +
+    `\n* [${title}](${link})` +
+    awesomeMobxSource.slice(index + length);
 
   // Create a new blob for the file
   const {

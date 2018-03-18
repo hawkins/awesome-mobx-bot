@@ -2,11 +2,13 @@ const { createRobot } = require("probot");
 const app = require("..");
 const newLinkPayload = require("./fixtures/issue_new_link.json");
 const existingLinkPayload = require("./fixtures/issue_existing_link.json");
+const tools = require("../src/tools");
 
-const awesomeMobXSource = `
-# mock source code
+const awesomeMobXSource = `# Comparisons with other state management libraries
 
-- [link](https://example.com/) - cool link!
+* [link](https://example.com/) - cool link 1!
+* [link](https://example.com/) - cool link 2!
+* [link](https://example.com/) - cool link 3!
 `;
 
 describe("issues", () => {
@@ -73,15 +75,29 @@ describe("issues", () => {
 
   it("when opened with a new link", async () => {
     await robot.receive(newLinkPayload);
-    expect(github.issues.createComment).toMatchSnapshot();
-    expect(github.gitdata.createBlob).toMatchSnapshot();
-    expect(github.gitdata.createCommit).toMatchSnapshot();
-    expect(github.pullRequests.create).toMatchSnapshot();
+    expect(github.issues.createComment.mock.calls).toMatchSnapshot();
+    expect(github.gitdata.createBlob.mock.calls).toMatchSnapshot();
+    expect(github.gitdata.createCommit.mock.calls).toMatchSnapshot();
+    expect(github.pullRequests.create.mock.calls).toMatchSnapshot();
   });
 
   it("when opened with an existing link", async () => {
     await robot.receive(existingLinkPayload);
-    expect(github.issues.createComment).toMatchSnapshot();
-    expect(github.issues.edit).toMatchSnapshot();
+    expect(github.issues.createComment.mock.calls).toMatchSnapshot();
+    expect(github.issues.edit.mock.calls).toMatchSnapshot();
+  });
+});
+
+describe("tools", () => {
+  it("getSourceIndex can find the index of a type section", () => {
+    expect(
+      tools.getSourceIndex(
+        awesomeMobXSource,
+        "Comparisons with other state management libraries"
+      )
+    ).toMatchSnapshot();
+    expect(
+      tools.getSourceIndex(awesomeMobXSource, "unknown")
+    ).toMatchSnapshot();
   });
 });
