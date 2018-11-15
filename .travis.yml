@@ -1,6 +1,18 @@
-sudo: false
 language: node_js
 node_js:
-  - "7.7.1"
-notifications:
-  disabled: true
+- node
+- 6
+- 8
+- 10
+- 11
+before_install: npm --global install greenkeeper-lockfile
+before_script:
+- greenkeeper-lockfile-update
+- npm --version
+after_script: greenkeeper-lockfile-upload
+install: yarn install
+script: yarn test
+cache:
+  yarn: true
+  directories:
+  - node_modules
