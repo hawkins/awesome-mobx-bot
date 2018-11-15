@@ -1,0 +1,14 @@
+{
+  "build": {
+    "env": {
+      "NODE_ENV": "production"
+    }
+  },
+  "env": {
+    "APP_ID": "9437",
+    "NODE_ENV": "production",
+    "WEBHOOK_SECRET": "@mobxbot-webhook-secret",
+    "PRIVATE_KEY": "@mobxbot-private-key"
+  },
+  "alias": "awesome-mobx-bot"
+}
