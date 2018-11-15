@@ -12,6 +12,15 @@ yarn install
 yarn start
 ```
 
+## Configuring
+
+The following values environment variables are needed to run the bot:
+
+- `APP_ID`: Your GitHub App ID
+- `PRIVATE_KEY_PATH`: Path to your GitHub-provided Private Key
+- `WEBHOOK_PROXY_URL`: A URL provided by [smee.io](https://smee.io)
+- `WEBHOOK_SECRET`: Secret set in your GitHub App settings
+
 ## Testing
 
 ### Simulating webhooks
