@@ -76,7 +76,7 @@ const updateFiles = async (
     ref: `refs/heads/bot/issue-${issueNumber}`
   });
 
-  return commitMessage;
+  return commitMessage.split('\n\n', 1)[0];
 };
 
 const openPR = async (
@@ -86,6 +86,7 @@ const openPR = async (
   commitMessage,
   title,
   link,
+  category,
   issueNumber
 ) => {
   // Open a pull request
@@ -97,17 +98,17 @@ const openPR = async (
     title: commitMessage,
     head: `bot/issue-${issueNumber}`,
     base: "master",
-    body: `This is an automatic pull request spawned by #${issueNumber}.
-${SIGNATURE}`
+    body: `Fixes issue #${issueNumber}\n\nThis is an automatic pull request spawned by the above issue.\n${SIGNATURE}`
   });
 
   // Comment on the issue with a link to the PR
   const params = context.issue({
     body: `Hi there!
 
-Thanks for suggesting that link! We found the following details for your link:
+Thanks for suggesting that link! We found the following details for it:
 
 - [${title}](${link})
+- Category: ${category}
 
 I also opened an automatic PR with this link added. You can check this out [at PR #${prNumber}](${prLink}) and make sure it looks good! :smile:
 ${SIGNATURE}

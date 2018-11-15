@@ -6,9 +6,10 @@ Array [
     Object {
       "body": "Hi there!
 
-Thanks for suggesting that link! We found the following details for your link:
+Thanks for suggesting that link! We found the following details for it:
 
 - [MobX vs Redux with React: A noob’s comparison and questions](https://codeburst.io/mobx-vs-redux-with-react-a-noobs-comparison-and-questions-382ba340be09)
+- Category: Comparisons with other state management libraries
 
 I also opened an automatic PR with this link added. You can check this out [at PR #4](https://example.com/1) and make sure it looks good! :smile:
 
@@ -70,7 +71,9 @@ Array [
   Array [
     Object {
       "base": "master",
-      "body": "This is an automatic pull request spawned by #3.
+      "body": "Fixes issue #3
+
+This is an automatic pull request spawned by the above issue.
 
 ---
 
@@ -81,10 +84,7 @@ Array [
       "head": "bot/issue-3",
       "owner": "hawkins",
       "repo": "awesome-mobx-bot",
-      "title": "Add 'MobX vs Redux with React: A noob’s comparison and questions' by hawkins
-
-Fixes issue #3
-",
+      "title": "Add 'MobX vs Redux with React: A noob’s comparison and questions' by hawkins",
     },
   ],
 ]

@@ -124,6 +124,7 @@ ${SIGNATURE}
     commitMessage,
     title,
     link,
+    resourceType,
     issueNumber
   );
 };
