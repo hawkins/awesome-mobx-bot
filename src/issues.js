@@ -8,7 +8,7 @@ const opened = async (context, awesomeMobxSource) => {
   const { owner, repo } = context.repo();
 
   const { login: author } = context.payload.sender;
-  const { body: issueBody, number: issueNumber } = context.payload.issue;
+  const { body: issueBody, issue_number: issueNumber } = context.payload.issue;
 
   /*
    * Find the link in the issue comment
@@ -39,7 +39,7 @@ ${SIGNATURE}
 
     // Comment on and close the issue
     context.github.issues.createComment(paramsToComment);
-    return context.github.issues.edit(paramsToClose);
+    return context.github.issues.update(paramsToClose);
   }
 
   /*
