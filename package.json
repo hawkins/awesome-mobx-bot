@@ -1,33 +1,52 @@
 {
   "name": "awesome-mobx-bot",
-  "version": "1.0.0",
-  "description": "",
-  "author": "Josh Hawkins <hawkinswritescode@gmail.com> (https://github.com/hawkins/awesome-mobx-bot)",
+  "version": "1.1.0",
+  "private": true,
+  "description": "A Probot app for managing Awesome lists",
+  "author": "Josh Hawkins <hawkins@users.noreply.github.com>",
   "license": "ISC",
   "repository": "https://github.com/hawkins/awesome-mobx-bot.git",
+  "homepage": "https://github.com/hawkins/awesome-mobx-bot",
+  "bugs": "https://github.com/hawkins/awesome-mobx-bot/issues",
+  "keywords": [
+    "probot",
+    "github",
+    "probot-app"
+  ],
   "scripts": {
-    "dev": "probot run ./index.js",
-    "start": "PRIVATE_KEY=$(echo $PRIVATE_KEY | base64 -d) probot run ./index.js",
-    "test": "jest"
+    "dev": "nodemon",
+    "start": "probot run ./index.js",
+    "lint": "standard --fix",
+    "test": "jest && standard",
+    "test:watch": "jest --watch --notify --notifyMode=change --coverage"
   },
   "dependencies": {
-    "cheerio": "^1.0.0-rc.2",
-    "probot": "^5.0.0",
-    "request": "^2.83.0",
-    "request-promise-native": "^1.0.5"
+    "cheerio": "^1.0.0-rc.3",
+    "probot": "^9.5.3"
   },
   "devDependencies": {
-    "jest": "^21.2.1",
-    "smee-client": "^1.0.1",
-    "standard": "^10.0.3"
+    "jest": "^24.9.0",
+    "nock": "^11.4.0",
+    "nodemon": "^2.0.0",
+    "smee-client": "^1.1.0",
+    "standard": "^14.3.1"
   },
   "engines": {
-    "node": ">= 7.7.0",
-    "npm": ">= 4.0.0"
+    "node": ">= 8.3.0"
   },
   "standard": {
     "env": [
       "jest"
     ]
+  },
+  "nodemonConfig": {
+    "exec": "npm start",
+    "watch": [
+      ".env",
+      "."
+    ]
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }
